@@ -50,7 +50,9 @@
                       <div class="charge-cell">{{ agentStats[u.id]?.openTasks ?? 0 }} ouvert(s)</div>
                     </td>
                     <td class="actions-cell">
-                      <button class="link-btn" @click="promptReset(u.username)">Réinitialiser</button>
+                      
+                    
+                      
                       <button class="link-btn danger-text" @click="handleDelete(u.username)" :disabled="u.username === currentUser?.username">
                         Supprimer
                       </button>
@@ -68,11 +70,7 @@
         <header class="section-header">
           <div>
             <h3>Statistiques de traitement</h3>
-            <p class="muted">Tables utilisées :
-              <code>stats_gender_mail_count</code>,
-              <code>stat_mail_by_gender</code>,
-              <code>stat_mail_by_priority</code>
-            </p>
+            
           </div>
          
         </header>
@@ -315,17 +313,21 @@ async function handleDelete(username: string) {
     alert(e instanceof Error ? e.message : 'Erreur lors de la suppression.');
   }
 }
+/* Non utilisé pour l'instant
+async function handleReset(username: string) {
+  if (!confirm(`Reinitialiser le mot de passe de ${username} ?`)) return;
 
-async function promptReset(username: string) {
-  const np = prompt(`Nouveau mot de passe pour ${username} :`, 'changeme');
-  if (!np) return;
+  
   try {
-    await resetPassword(username, np);
-    alert('Mot de passe réinitialisé.');
+    // pass an explicit newPassword (empty string to let backend generate one) to satisfy the function signature
+    await resetPassword(username, '');
+    alert('Mot de passe reinitialise.');
   } catch (e) {
-    alert(e instanceof Error ? e.message : 'Erreur lors de la réinitialisation.');
+    alert(e instanceof Error ? e.message : 'Erreur lors de la reinitialisation.');
   }
-}
+}*/
+
+
 
 function genderColumnLabel(col: GenderStat) {
   return genderColumnLabels[col] ?? col;
