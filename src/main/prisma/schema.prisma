@@ -35,18 +35,18 @@ model privacy {
 
 // Employés de l'entreprise (qui envoient les mails)
 model staff {
-  id                   Int           @id @default(autoincrement())
-  nom_complet          String        @db.VarChar(255)
-  adresse_mail         String        @unique @db.VarChar(255)
+  id                   Int             @id @default(autoincrement())
+  nom_complet          String          @db.VarChar(255)
+  adresse_mail         String          @unique @db.VarChar(255)
   statut_hierarchique  StaffHierarchie
   departement_id       Int?
-  est_marie            Boolean       @default(false) @db.TinyInt
-  nombre_enfants       Int           @default(0)
+  est_marie            Boolean         @default(false) @db.TinyInt
+  nombre_enfants       Int             @default(0)
   genre                Genre
   
-  departement          departements? @relation(fields: [departement_id], references: [id], onDelete: SetNull)
+  departement          departements?   @relation(fields: [departement_id], references: [id], onDelete: SetNull)
   mail                 mail[]
- }
+}
 
 // Équipe IT qui utilise l'application
 model users {
@@ -83,14 +83,14 @@ model mail {
 model taches {
   id                  Int         @id @default(autoincrement())
   mail_id             Int
-  agent_user_id       Int
+  agent_user_id       Int?
   statut_tache        MailStatut  @default(Nouveau)
   priorite_calculee   MailPriorite
   date_attribution    DateTime?   @db.DateTime(0)
   commentaire         String?     @db.Text
   
   mail                mail        @relation(fields: [mail_id], references: [id], onDelete: Cascade)
-  agent               users       @relation(fields: [agent_user_id], references: [id], onDelete: SetNull)
+  agent               users?      @relation(fields: [agent_user_id], references: [id], onDelete: SetNull)
   
   @@index([mail_id])
   @@index([agent_user_id])
@@ -149,7 +149,7 @@ enum UserRole {
 enum MailStatut {
   Nouveau
   Assigne @map("Assigné")
-  Resolu @map("Résolu")
+  Resolu  @map("Résolu")
 }
 
 enum MailPriorite {
