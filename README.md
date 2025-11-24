@@ -1,46 +1,196 @@
-# SnowDispatcher
+Voici le **README intégralement en français**, adapté à XAMPP, Prisma, Electron + Vue + Vite, et fidèle au style du README original du propriétaire de l’app SnowDispatcher.
 
-Electron + Vue (Vite) app for mail dispatching and task management.
+Tu peux le coller tel quel dans son repo.
 
-## Prerequisites
-- Node.js 20+
-- npm 10+
-- MySQL reachable at the URL you configure
+---
 
-## Setup
-1) Install deps
+# 📄 README — SnowDispatcher
+
+Application Electron + Vue (Vite) pour le dispatch des mails et la gestion des tâches.
+
+## ⚙️ Prérequis
+
+* **Node.js 20+**
+* **npm 10+**
+* **MySQL** accessible via l’URL définie dans `DATABASE_URL`
+  👉 Pour le développement local, **XAMPP** est recommandé
+
+Si vous utilisez **XAMPP**, MySQL tourne par défaut sur :
+
 ```
+Host : localhost
+Port : 3306
+Utilisateur : root
+Mot de passe : (vide)
+```
+
+phpMyAdmin est accessible via :
+[http://localhost/phpmyadmin](http://localhost/phpmyadmin)
+
+---
+
+## 🚀 Installation
+
+### 1. Installer les dépendances
+
+```bash
 npm install
 ```
-2) Create your env file
-```
-cp .env.example .env
-# edit .env and fill DATABASE_URL and Gmail keys
-```
-3) Database
-- If you have `schema.sql`, import it into MySQL (ex: `mysql -u user -p db < schema.sql`).
-- Otherwise, ensure you have an empty `snowdispatcher` database (or adjust `DATABASE_URL`).
 
-## Run
-- Dev (vite + electron):
+### 2. Créer votre fichier d’environnement
+
+```bash
+cp .env.example .env
 ```
+
+Puis éditer `.env` et remplir :
+
+* `DATABASE_URL`
+* les clés API Gmail (Client ID / Secret / Refresh Token / Redirect URI)
+
+---
+
+## 🗄️ Base de données (via XAMPP)
+
+### 🅰️ Option A — Vous avez `schema.sql`
+
+Le fichier `schema.sql` fournit la structure complète de la base.
+Pour l’importer :
+
+1. Lancez MySQL dans XAMPP
+2. Accédez à : [http://localhost/phpmyadmin](http://localhost/phpmyadmin)
+3. Créez une base nommée, par exemple :
+
+```
+snowdispatcher
+```
+
+4. Cliquez sur la base → onglet **Importer**
+5. Sélectionnez :
+   `database/schema.sql`
+6. Lancer l’import
+
+➡️ Toutes les tables nécessaires sont créées.
+
+---
+
+### 🅱️ Option B — Vous partez d’une base vide
+
+Créez simplement une base vide dans phpMyAdmin :
+
+```
+snowdispatcher
+```
+
+Puis adaptez votre `DATABASE_URL`.
+
+---
+
+## 🔧 Prisma
+
+Le fichier Prisma se trouve dans :
+
+```
+src/main/prisma/schema.prisma
+```
+
+### Générer le client Prisma
+
+```bash
+npx prisma generate --schema=src/main/prisma/schema.prisma
+```
+
+### Synchroniser Prisma avec la base existante
+
+```bash
+npx prisma db pull --schema=src/main/prisma/schema.prisma
+```
+
+⚠️ Assurez-vous que MySQL est lancé dans XAMPP.
+
+---
+
+## 🔑 Variables d’environnement importantes
+
+### Base de données
+
+Format attendu :
+
+```
+DATABASE_URL="mysql://UTILISATEUR:MOTDEPASSE@HOTE:PORT/NOM_BASE"
+```
+
+Exemple XAMPP (mot de passe vide) :
+
+```
+DATABASE_URL="mysql://root:@localhost:3306/snowdispatcher"
+```
+
+### Gmail API (obligatoire pour la récupération des mails)
+
+* `GMAIL_CLIENT_ID`
+* `GMAIL_CLIENT_SECRET`
+* `GMAIL_REFRESH_TOKEN`
+* `GMAIL_REDIRECT_URI`
+
+### Options supplémentaires
+
+* `GMAIL_USER_EMAIL`
+* `GMAIL_LABEL_ID`
+* `GMAIL_QUERY`
+* `GMAIL_MAX_RESULTS`
+
+---
+
+## ▶️ Lancer l'application
+
+### Mode développement (Vite + Electron)
+
+```bash
 npm run dev
 ```
-- Prod-ish local (build renderer then forge):
-```
+
+### Mode "production local" (build + Electron Forge)
+
+```bash
 npm run start:prod
 ```
 
-## Important env vars
-- `DATABASE_URL` (format `mysql://USER:PASSWORD@HOST:PORT/DATABASE`)
-- `GMAIL_CLIENT_ID`, `GMAIL_CLIENT_SECRET`, `GMAIL_REFRESH_TOKEN`, `GMAIL_REDIRECT_URI`
-- Optional: `GMAIL_USER_EMAIL`, `GMAIL_LABEL_ID`, `GMAIL_QUERY`, `GMAIL_MAX_RESULTS`
+> Si nécessaire, build le renderer avant :
+>
+> ```bash
+> npm run build:renderer
+> ```
 
-## Useful scripts
-- `npm run prisma:generate` / `npm run prisma:push` (if you use Prisma)
-- `npm run seed:mail` to load sample data (if the script exists)
-- `npm run lint`
+---
 
-## Notes
-- Do not commit `.env` (already ignored). Keep secrets local or in CI secrets.
-- In packaged/production mode, the renderer loads `dist/index.html`; run `npm run build:renderer` before `npm run start:prod` if needed.
+## 🧰 Scripts utiles
+
+```bash
+npm run prisma:generate   # régénère le client Prisma
+npm run prisma:push       # pousse le schéma (à utiliser prudemment)
+npm run seed:mail         # charge des données de test (si le script existe)
+npm run lint              # lint du code
+```
+
+---
+
+## 📝 Notes
+
+* **Ne jamais committer `.env`** (déjà dans `.gitignore`)
+* En mode packagé/production, le renderer charge `dist/index.html`
+* Pour reconstruire l’UI :
+
+  ```bash
+  npm run build:renderer
+  ```
+
+---
+
+Si tu veux, je peux aussi :
+
+✔ Ajouter des captures d’écran
+✔ Ajouter une section “Dépannage (Prisma / MySQL / XAMPP)”
+✔ Ajouter un guide utilisateur
+
+Dis-moi ce que tu veux !
