@@ -1,0 +1,249 @@
+/* Global styles for SnowDispatcher */
+
+:root {
+  /* Palette: bleu / blanc / gris */
+  --color-primary: #1e6fd8; /* primary blue */
+  --color-primary-600: #155fb8;
+  --color-primary-400: #3b82f6;
+  --color-muted: #6b7280; /* gray */
+  --color-muted-200: #e6e9ee;
+  --color-bg: #f6f8fb; /* soft off-white */
+  --color-surface: #ffffff;
+  --color-text: #0f1724; /* dark text */
+  --color-text-muted: #536179;
+  --color-border: #e6eef6;
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.04);
+  --shadow-md: 0 8px 20px rgba(16, 24, 40, 0.07);
+  --shadow-lg: 0 22px 48px rgba(16, 24, 40, 0.12);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* --- Visual identity and layout utilities --- */
+
+/* App frame */
+.app-shell {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  grid-template-rows: 60px 1fr;
+  grid-template-areas:
+    "sidebar header"
+    "sidebar main";
+  min-height: 100vh;
+  background: var(--color-bg);
+}
+
+.app-header {
+  grid-area: header;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-md);
+  background: linear-gradient(90deg, var(--color-surface), var(--color-surface));
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.app-sidebar {
+  grid-area: sidebar;
+  background: linear-gradient(180deg, var(--color-primary), var(--color-primary-600));
+  color: white;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  padding: var(--space-lg) var(--space-md);
+}
+
+.app-sidebar .logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.95);
+}
+
+.logo-brand {
+  color: #fff;
+  display:inline-block;
+  background: linear-gradient(90deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06));
+  padding: 2px 8px;
+  border-radius: 8px;
+  margin-right: 6px;
+  box-shadow: 0 6px 18px rgba(15,23,42,0.12);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.app-sidebar .side-nav { margin-top: 18px; }
+.app-sidebar .side-nav a { color: rgba(255,255,255,0.92); text-decoration:none; display:block; padding:8px 6px; border-radius:6px; }
+.app-sidebar .side-nav a.router-link-active { background: rgba(255,255,255,0.06); }
+
+.app-main {
+  grid-area: main;
+  padding: var(--space-lg);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 6px 10px rgba(30, 111, 216, 0.08);
+}
+.btn.secondary {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+.btn.ghost {
+  background: transparent;
+  color: var(--color-primary-400);
+}
+
+/* Cards */
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: calc(var(--space-md) + 4px);
+  border: 1px solid var(--color-border);
+}
+
+/* Priority / task cards */
+.priority-columns {
+  display: flex;
+  gap: var(--space-md);
+  align-items: flex-start;
+}
+.priority-column {
+  flex: 1 1 0;
+  min-width: 200px;
+}
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
+}
+.priority-card {
+  margin-bottom: var(--space-sm);
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(180deg, #ffffff, #fbfdff);
+  border: 1px solid var(--color-border);
+}
+
+/* Table common styling for better readability */
+.table-wrap .stats-table thead th,
+.table-wrap .stats-table thead td,
+.tasks-table thead th {
+  background: var(--color-muted-200);
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.tasks-table th, .tasks-table td, .stats-table th, .stats-table td {
+  padding: 12px 14px;
+}
+
+.tasks-table tbody tr:hover, .stats-table tbody tr:hover {
+  background: rgba(59,130,246,0.03);
+}
+
+/* Small ghost / secondary button variant to reuse */
+.btn.ghost { background: transparent; color: var(--color-primary); border: 1px solid transparent; box-shadow: none; }
+
+/* Utility for KPI icon area */
+.kpi { display:flex; align-items:center; gap:12px; }
+.kpi .icon { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; color:white; font-weight:700; }
+
+/* Mon espace */
+.mon-espace {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+.mon-espace-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+.back-btn {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+/* Notification toasts (top-right) */
+.toasts-root {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 9999;
+}
+.toast {
+  background: linear-gradient(90deg, #ffffff, #f8fbff);
+  color: var(--color-text);
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md);
+  min-width: 260px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: 60px 1fr;
+    grid-template-areas:
+      "header"
+      "main";
+  }
+  .app-sidebar { display: none; }
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

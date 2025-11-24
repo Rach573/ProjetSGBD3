@@ -1,0 +1,159 @@
+// Prisma Schema for SnowDispatcher
+// Based on the MariaDB database schema
+
+generator client {
+  provider   = "prisma-client-js"
+  output     = "./generated"
+  engineType = "library"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Départements de l'entreprise
+model departements {
+  id              Int      @id @default(autoincrement())
+  nom_departement String   @unique @db.VarChar(255)
+  staff           staff[]
+}
+
+// Catégories de mails
+model category {
+  id            Int     @id @default(autoincrement())
+  nom_categorie String  @unique @db.VarChar(100)
+  mail          mail[]
+}
+
+// Niveaux de confidentialité
+model privacy {
+  id                      Int     @id @default(autoincrement())
+  niveau_confidentialite  String  @unique @db.VarChar(100)
+  mail                    mail[]
+}
+
+// Employés de l'entreprise (qui envoient les mails)
+model staff {
+  id                   Int           @id @default(autoincrement())
+  nom_complet          String        @db.VarChar(255)
+  adresse_mail         String        @unique @db.VarChar(255)
+  statut_hierarchique  StaffHierarchie
+  departement_id       Int?
+  est_marie            Boolean       @default(false) @db.TinyInt
+  nombre_enfants       Int           @default(0)
+  genre                Genre
+  
+  departement          departements? @relation(fields: [departement_id], references: [id], onDelete: SetNull)
+  mail                 mail[]
+ }
+
+// Équipe IT qui utilise l'application
+model users {
+  id            Int       @id @default(autoincrement())
+  username      String    @unique @db.VarChar(100)
+  password_hash String    @db.VarChar(255)
+  role          UserRole  @default(agent)
+ 
+  taches        taches[]
+}
+
+// Messages entrants
+model mail {
+  id                   Int       @id @default(autoincrement())
+  objet                String    @db.VarChar(255)
+  contenu              String?   @db.Text
+  date_reception       DateTime  @default(now()) @db.DateTime(0)
+  expediteur_staff_id  Int?
+  categorie_id         Int?
+  privacy_id           Int?
+  handler_user_id      Int?      @db.UnsignedInt
+  
+  expediteur           staff?    @relation(fields: [expediteur_staff_id], references: [id], onDelete: SetNull)
+  categorie            category? @relation(fields: [categorie_id], references: [id], onDelete: SetNull)
+  privacy              privacy?  @relation(fields: [privacy_id], references: [id], onDelete: SetNull)
+  taches               taches[]
+  
+  @@index([expediteur_staff_id])
+  @@index([categorie_id])
+  @@index([privacy_id])
+}
+
+// Tickets de suivi
+model taches {
+  id                  Int         @id @default(autoincrement())
+  mail_id             Int
+  agent_user_id       Int
+  statut_tache        MailStatut  @default(Nouveau)
+  priorite_calculee   MailPriorite
+  date_attribution    DateTime?   @db.DateTime(0)
+  commentaire         String?     @db.Text
+  
+  mail                mail        @relation(fields: [mail_id], references: [id], onDelete: Cascade)
+  agent               users       @relation(fields: [agent_user_id], references: [id], onDelete: SetNull)
+  
+  @@index([mail_id])
+  @@index([agent_user_id])
+}
+
+// Statistiques: compteur de mails par genre
+model stats_gender_mail_count {
+  id          Int     @id @default(autoincrement())
+  genre       Genre   @unique
+  mail_count  Int     @default(0)
+}
+
+// Statistiques: mails par genre par jour
+model stat_mail_by_gender {
+  stat_date   DateTime    @db.Date
+  gender      GenderStat
+  mail_count  Int         @db.UnsignedInt
+  
+  @@id([stat_date, gender])
+}
+
+// Statistiques: mails par priorité par jour
+model stat_mail_by_priority {
+  stat_date   DateTime  @db.Date
+  priority_id Int       @db.UnsignedInt
+  mail_count  Int       @db.UnsignedInt
+  
+  @@id([stat_date, priority_id])
+}
+
+// Enums
+enum StaffHierarchie {
+  Leader
+  N @map("N+1")
+  Employe_Lambda @map("Employé Lambda")
+}
+
+enum Genre {
+  M
+  F
+  Autre
+}
+
+enum GenderStat {
+  F
+  M
+  X
+  U // Unknown/Null
+}
+
+enum UserRole {
+  admin
+  agent
+}
+
+enum MailStatut {
+  Nouveau
+  Assigne @map("Assigné")
+  Resolu @map("Résolu")
+}
+
+enum MailPriorite {
+  Alerte_Rouge @map("Alerte Rouge")
+  Urgent
+  Normale
+}
