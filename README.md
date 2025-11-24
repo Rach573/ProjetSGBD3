@@ -187,10 +187,11 @@ npm run lint              # lint du code
 
 ---
 
-Si tu veux, je peux aussi :
+## Comptes utilisateurs (par défaut)
 
-✔ Ajouter des captures d’écran
-✔ Ajouter une section “Dépannage (Prisma / MySQL / XAMPP)”
-✔ Ajouter un guide utilisateur
+L’application contient 4 comptes utilisateurs standards et 1 compte administrateur préconfigurés.
 
-Dis-moi ce que tu veux !
+Rôle : Admin | Identifiant : admin | Mot de passe : admin
+Rôle : User  | Identifiant : bob   | Mot de passe : bob123
+Rôle : User  | Identifiant : carol | Mot de passe : carol123
+Rôle : User  | Identifiant : Illyes | Mot de passe : Illyes123456
