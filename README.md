@@ -1,9 +1,3 @@
-Voici le **README intégralement en français**, adapté à XAMPP, Prisma, Electron + Vue + Vite, et fidèle au style du README original du propriétaire de l’app SnowDispatcher.
-
-Tu peux le coller tel quel dans son repo.
-
----
-
 # 📄 README — SnowDispatcher
 
 Application Electron + Vue (Vite) pour le dispatch des mails et la gestion des tâches.
